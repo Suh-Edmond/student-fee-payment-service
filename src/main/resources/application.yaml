@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: fee-payment
+
+  mvc:
+    problemdetails:
+      enabled=true:
