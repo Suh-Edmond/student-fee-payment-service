@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -16,4 +17,7 @@ public class StudentAccount extends BaseEntity{
 
     @Column(name = "student_number")
     private String studentNumber;
+
+    @OneToMany(mappedBy = "studentAccount")
+    private Set<FeePayment> feePayments;
 }
