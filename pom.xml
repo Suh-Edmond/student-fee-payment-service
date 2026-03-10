@@ -15,7 +15,7 @@
 	<description>Simple student one-time fee payment platform</description>
 	<url/>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>25</java.version>
 		<mapstruct.version>1.6.2</mapstruct.version>
 	</properties>
 	<dependencies>

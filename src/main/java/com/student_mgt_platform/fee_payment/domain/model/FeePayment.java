@@ -34,6 +34,9 @@ public class FeePayment extends BaseEntity{
     @Column(name = "next_due_date")
     private LocalDate nextDueDate;
 
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
+
     @ManyToOne()
     private StudentAccount studentAccount;
 }
