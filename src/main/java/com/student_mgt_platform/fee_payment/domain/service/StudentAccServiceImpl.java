@@ -13,12 +13,11 @@ public class StudentAccServiceImpl implements StudentAccService {
     private final StudentAccountRepository studentAccountRepository;
 
     @Override
-    public void createStudentAccount(String studentNumber) {
-        if(getStudentAccount(studentNumber).isEmpty()) {
-            StudentAccount studentAccount = new StudentAccount();
-            studentAccount.setStudentNumber(studentNumber);
-            studentAccountRepository.save(studentAccount);
-        }
+    public StudentAccount createStudentAccount(String studentNumber) {
+        StudentAccount studentAccount = new StudentAccount();
+        studentAccount.setStudentNumber(studentNumber);
+
+        return studentAccountRepository.save(studentAccount);
     }
 
     @Override

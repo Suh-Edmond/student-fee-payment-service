@@ -5,7 +5,7 @@ import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import java.util.Optional;
 
 public interface StudentAccService {
-    void createStudentAccount(String studentAccount);
+    StudentAccount createStudentAccount(String studentAccount);
 
     Optional<StudentAccount> getStudentAccount(String studentId);
 }
