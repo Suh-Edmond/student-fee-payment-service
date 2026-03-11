@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeePaymentController {
     private final FeePaymentService feePaymentService;
 
-    @PostMapping("initiate-student-fee-payment")
-    public ResponseEntity<FeePaymentDto> initiateStudentFeePayment(@Valid @RequestBody final FeePaymentRequest request) {
+    @PostMapping("one-time-fee-payment")
+    public ResponseEntity<FeePaymentDto> oneTimeFeePayment(@Valid @RequestBody final FeePaymentRequest request) {
         return ResponseEntity.ok(feePaymentService.makeStudentFeePayment(request));
     }
 }

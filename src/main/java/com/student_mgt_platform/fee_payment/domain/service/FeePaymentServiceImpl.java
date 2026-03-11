@@ -10,12 +10,14 @@ import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRe
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
 import com.student_mgt_platform.fee_payment.dto.mapper.FeePaymentMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.student_mgt_platform.fee_payment.util.PaymentDateScheduler.computeNextPaymentDueDate;
 import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.*;
@@ -24,42 +26,55 @@ import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculat
 @RequiredArgsConstructor
 public class FeePaymentServiceImpl implements FeePaymentService{
     private final FeePaymentRepository feePaymentRepository;
-    private final InstitutionalFeeRepository InstitutionalFeeRepository;
+    private final InstitutionalFeeRepository institutionalFeeRepository;
     private final StudentAccServiceImpl studentAccService;
 
     @Override
+    @Transactional
     public FeePaymentDto makeStudentFeePayment(FeePaymentRequest request) {
         StudentAccount studentAccount = new StudentAccount();
         InstitutionalFee institutionalFee = getInstitutionalFee(request.getInstitutionalFeeCategory());
-        Optional<StudentAccount> studAccount = studentAccService.getStudentAccount(request.getStudentNumber());
-        if(studAccount.isEmpty()){
-            studentAccount = studentAccService.createStudentAccount(request.getStudentNumber());
+        Optional<StudentAccount> stud = studentAccService.getStudentAccount(request.getStudentNumber());
+        if(stud.isEmpty()){
+            studentAccount = studentAccService.createStudentAccount(request.getStudentNumber(), institutionalFee);
         }
+        Optional<FeePayment> studentLatestFeePayment = getStudentLatestFeePayment(studentAccount.getId());
         int incentiveRate = computeIncentiveRate(request.getPaymentAmount());
         BigDecimal incentiveAmount = computeIncentiveAmount(request.getPaymentAmount());
         LocalDate paymentDate = LocalDate.now();
         LocalDate nextPaymentDueDate = computeNextPaymentDueDate(paymentDate);
-        BigDecimal paymentBalance = computePaymentBalance(request.getPaymentAmount(), incentiveAmount, institutionalFee.getAmountPayable());
+        BigDecimal balancePayment = studentLatestFeePayment.isEmpty() ? studentAccount.getCurrentBalance() : studentLatestFeePayment.get().getNewBalance();
+        BigDecimal paymentBalance = computePaymentBalance(request.getPaymentAmount(), incentiveAmount, balancePayment);
 
         FeePayment feePayment = new FeePayment();
+        feePayment.setPreviousBalance(balancePayment);
         feePayment.setStudentAccount(studentAccount);
         feePayment.setPaymentAmount(request.getPaymentAmount());
         feePayment.setIncentiveAmount(incentiveAmount);
         feePayment.setIncentiveRate(incentiveRate);
         feePayment.setPaymentDate(paymentDate);
-        feePayment.setNextDueDate(nextPaymentDueDate);
         feePayment.setNewBalance(paymentBalance);
 
         FeePayment savedFeePayment = feePaymentRepository.save(feePayment);
+        studentAccount.setNextDueDate(nextPaymentDueDate);
+        studentAccount.setCurrentBalance(paymentBalance);
+        studentAccService.updateStudentAccount(studentAccount);
+        System.out.println(savedFeePayment);
 
-        return FeePaymentMapper.INSTANCE.feePaymentDtoToFeePayment(savedFeePayment);
+        return FeePaymentMapper.INSTANCE.feePaymentDtoToFeePayment(savedFeePayment, nextPaymentDueDate);
+
     }
 
     private InstitutionalFee getInstitutionalFee(InstitutionalFeeCategory category){
-        Optional<InstitutionalFee> institutionalFee = InstitutionalFeeRepository.findInstitutionalFeeByCategory(category);
+        Optional<InstitutionalFee> institutionalFee = institutionalFeeRepository.findInstitutionalFeeByCategory(category);
         if(institutionalFee.isEmpty()){
             throw new BusinessValidationException("Institutional fee not found");
         }
         return institutionalFee.get();
     }
+
+    private Optional<FeePayment> getStudentLatestFeePayment(UUID studentId){
+        return feePaymentRepository.findFirstByStudentAccount_IdOrderByPaymentDateDesc(studentId);
+    }
+    
 }

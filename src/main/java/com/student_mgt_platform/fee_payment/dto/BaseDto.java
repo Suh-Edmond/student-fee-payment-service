@@ -7,6 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class BaseDto {
     private LocalDateTime created;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
+    private LocalDateTime updated;
 }
