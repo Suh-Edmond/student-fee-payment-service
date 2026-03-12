@@ -12,6 +12,7 @@ import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
 import com.student_mgt_platform.fee_payment.dto.mapper.FeePaymentMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import static com.student_mgt_platform.fee_payment.util.PaymentDateScheduler.computeNextPaymentDueDate;
 import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FeePaymentServiceImpl implements FeePaymentService{
@@ -32,16 +34,16 @@ public class FeePaymentServiceImpl implements FeePaymentService{
     @Override
     @Transactional
     public FeePaymentDto makeStudentFeePayment(FeePaymentRequest request) {
-        StudentAccount studentAccount = new StudentAccount();
         InstitutionalFee institutionalFee = getInstitutionalFee(request.getInstitutionalFeeCategory());
         Optional<StudentAccount> stud = studentAccService.getStudentAccount(request.getStudentNumber());
-        if(stud.isEmpty()){
-            studentAccount = studentAccService.createStudentAccount(request.getStudentNumber(), institutionalFee);
-        }
+        StudentAccount studentAccount = stud.orElseGet(() -> studentAccService.createStudentAccount(request.getStudentNumber(), institutionalFee));
         Optional<FeePayment> studentLatestFeePayment = getStudentLatestFeePayment(studentAccount.getId());
+
         int incentiveRate = computeIncentiveRate(request.getPaymentAmount());
-        BigDecimal incentiveAmount = computeIncentiveAmount(request.getPaymentAmount());
+        BigDecimal incentiveAmount = computeIncentiveAmount(request.getPaymentAmount(), incentiveRate);
+
         LocalDate paymentDate = LocalDate.now();
+
         LocalDate nextPaymentDueDate = computeNextPaymentDueDate(paymentDate);
         BigDecimal balancePayment = studentLatestFeePayment.isEmpty() ? studentAccount.getCurrentBalance() : studentLatestFeePayment.get().getNewBalance();
         BigDecimal paymentBalance = computePaymentBalance(request.getPaymentAmount(), incentiveAmount, balancePayment);
@@ -56,10 +58,10 @@ public class FeePaymentServiceImpl implements FeePaymentService{
         feePayment.setNewBalance(paymentBalance);
 
         FeePayment savedFeePayment = feePaymentRepository.save(feePayment);
+
         studentAccount.setNextDueDate(nextPaymentDueDate);
         studentAccount.setCurrentBalance(paymentBalance);
         studentAccService.updateStudentAccount(studentAccount);
-        System.out.println(savedFeePayment);
 
         return FeePaymentMapper.INSTANCE.feePaymentDtoToFeePayment(savedFeePayment, nextPaymentDueDate);
 
