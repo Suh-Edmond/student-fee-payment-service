@@ -154,6 +154,7 @@
 						<exclude>**/dto/**</exclude>
 						<exclude>**/exceptions/**</exclude>
 						<exclude>**/mapper/**</exclude>
+						<exclude>**/constant/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

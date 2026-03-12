@@ -4,6 +4,7 @@ import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
 import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.StudentAccountRepository;
+import com.student_mgt_platform.fee_payment.domain.service.impl.StudentAccServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -11,8 +12,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Optional;

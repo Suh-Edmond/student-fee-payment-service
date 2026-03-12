@@ -8,9 +8,10 @@ import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.FeePaymentRepository;
 import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
+import com.student_mgt_platform.fee_payment.domain.service.impl.FeePaymentServiceImpl;
+import com.student_mgt_platform.fee_payment.domain.service.impl.StudentAccServiceImpl;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ class FeePaymentServiceImplTest {
     private  InstitutionalFeeRepository mockInstitutionalFeeRepository;
 
     @Mock
-    private  StudentAccServiceImpl mockStudentAccService;
+    private StudentAccServiceImpl mockStudentAccService;
 
     @Captor
     private ArgumentCaptor<StudentAccount> studentAccountArgumentCaptor;

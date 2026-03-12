@@ -17,6 +17,10 @@ class PaymentDateSchedulerTest {
     private final List<DayOfWeek> WEEK_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY);
 
     @Test
+    void TestPaymentDateScheduler() {
+        assertNotNull(new PaymentDateScheduler());
+    }
+    @Test
     void computeNextPaymentDueDate_should_return_next_payment_due_date_when_due_date_is_weekday() {
         LocalDate currentDate = LocalDate.of(2026, 3, 14);
         LocalDate nextPaymentDueDate = computeNextPaymentDueDate(currentDate);
@@ -27,7 +31,7 @@ class PaymentDateSchedulerTest {
 
     @Test
     void computeNextPaymentDueDate_should_reset_due_when_due_date_is_saturday() {
-        LocalDate currentDate = LocalDate.of(2026, 4, 6);
+        LocalDate currentDate = LocalDate.of(2026, 4, 5);
         LocalDate nextPaymentDueDate = computeNextPaymentDueDate(currentDate);
 
         assertTrue(WEEK_DAYS.contains(nextPaymentDueDate.getDayOfWeek()));

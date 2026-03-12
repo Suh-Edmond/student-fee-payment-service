@@ -15,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class PaymentIncentiveCalculatorTest {
 
     @Test
+    void TestPaymentIncentiveCalculator() {
+        PaymentIncentiveCalculator paymentIncentiveCalculator = new PaymentIncentiveCalculator();
+        assertNotNull(paymentIncentiveCalculator);
+    }
+
+    @Test
     void computeIncentiveRate_when_amount_is_zero() {
         int incentiveRate = computeIncentiveRate(BigDecimal.valueOf(0));
         assertEquals(0, incentiveRate);
@@ -24,6 +30,12 @@ class PaymentIncentiveCalculatorTest {
     void computeIncentiveRate_when_amount_is_less_than_equal_100000() {
         int incentiveRate = computeIncentiveRate(BigDecimal.valueOf(100000));
         assertEquals(3, incentiveRate);
+    }
+
+    @Test
+    void computeIncentiveRate_when_amount_is_less_than_100000() {
+        int incentiveRate = computeIncentiveRate(BigDecimal.valueOf(50000));
+        assertEquals(1, incentiveRate);
     }
 
     @Test

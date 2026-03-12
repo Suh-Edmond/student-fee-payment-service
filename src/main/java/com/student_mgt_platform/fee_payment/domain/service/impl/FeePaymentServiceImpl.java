@@ -1,4 +1,4 @@
-package com.student_mgt_platform.fee_payment.domain.service;
+package com.student_mgt_platform.fee_payment.domain.service.impl;
 
 import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
 import com.student_mgt_platform.fee_payment.domain.exceptions.BusinessValidationException;
@@ -7,12 +7,12 @@ import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.FeePaymentRepository;
 import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
+import com.student_mgt_platform.fee_payment.domain.service.FeePaymentService;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
 import com.student_mgt_platform.fee_payment.dto.mapper.FeePaymentMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,10 +23,10 @@ import java.util.UUID;
 import static com.student_mgt_platform.fee_payment.util.PaymentDateScheduler.computeNextPaymentDueDate;
 import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.*;
 
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
-public class FeePaymentServiceImpl implements FeePaymentService{
+public class FeePaymentServiceImpl implements FeePaymentService {
     private final FeePaymentRepository feePaymentRepository;
     private final InstitutionalFeeRepository institutionalFeeRepository;
     private final StudentAccServiceImpl studentAccService;

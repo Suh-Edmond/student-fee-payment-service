@@ -1,8 +1,9 @@
-package com.student_mgt_platform.fee_payment.domain.service;
+package com.student_mgt_platform.fee_payment.domain.service.impl;
 
 import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.StudentAccountRepository;
+import com.student_mgt_platform.fee_payment.domain.service.StudentAccService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
