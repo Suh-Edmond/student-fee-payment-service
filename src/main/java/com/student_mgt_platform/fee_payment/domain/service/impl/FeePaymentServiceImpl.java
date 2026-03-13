@@ -1,12 +1,8 @@
 package com.student_mgt_platform.fee_payment.domain.service.impl;
 
-import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
-import com.student_mgt_platform.fee_payment.domain.exceptions.BusinessValidationException;
 import com.student_mgt_platform.fee_payment.domain.model.FeePayment;
-import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.FeePaymentRepository;
-import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
 import com.student_mgt_platform.fee_payment.domain.service.FeePaymentService;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
@@ -28,15 +24,12 @@ import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculat
 @RequiredArgsConstructor
 public class FeePaymentServiceImpl implements FeePaymentService {
     private final FeePaymentRepository feePaymentRepository;
-    private final InstitutionalFeeRepository institutionalFeeRepository;
     private final StudentAccServiceImpl studentAccService;
 
     @Override
     @Transactional
     public FeePaymentDto makeStudentFeePayment(FeePaymentRequest request) {
-        InstitutionalFee institutionalFee = getInstitutionalFee(request.getInstitutionalFeeCategory());
-        Optional<StudentAccount> stud = studentAccService.getStudentAccount(request.getStudentNumber());
-        StudentAccount studentAccount = stud.orElseGet(() -> studentAccService.createStudentAccount(request.getStudentNumber(), institutionalFee));
+        StudentAccount studentAccount = studentAccService.getStudentAccount(request.getStudentNumber());
         Optional<FeePayment> studentLatestFeePayment = getStudentLatestFeePayment(studentAccount.getId());
 
         int incentiveRate = computeIncentiveRate(request.getPaymentAmount());
@@ -45,7 +38,7 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         LocalDate paymentDate = LocalDate.now();
 
         LocalDate nextPaymentDueDate = computeNextPaymentDueDate(paymentDate);
-        BigDecimal balancePayment = studentLatestFeePayment.isEmpty() ? studentAccount.getCurrentBalance() : studentLatestFeePayment.get().getNewBalance();
+        BigDecimal balancePayment = studentLatestFeePayment.isEmpty() ? studentAccount.getInstitutionalFee().getAmountPayable() : studentLatestFeePayment.get().getNewBalance();
         BigDecimal paymentBalance = computePaymentBalance(request.getPaymentAmount(), incentiveAmount, balancePayment);
 
         FeePayment feePayment = new FeePayment();
@@ -60,23 +53,13 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         FeePayment savedFeePayment = feePaymentRepository.save(feePayment);
 
         studentAccount.setNextDueDate(nextPaymentDueDate);
-        studentAccount.setCurrentBalance(paymentBalance);
         studentAccService.updateStudentAccount(studentAccount);
 
         return FeePaymentMapper.INSTANCE.feePaymentDtoToFeePayment(savedFeePayment, nextPaymentDueDate);
-
     }
 
-    private InstitutionalFee getInstitutionalFee(InstitutionalFeeCategory category){
-        Optional<InstitutionalFee> institutionalFee = institutionalFeeRepository.findInstitutionalFeeByCategory(category);
-        if(institutionalFee.isEmpty()){
-            throw new BusinessValidationException("Institutional fee not found");
-        }
-        return institutionalFee.get();
-    }
-
-    private Optional<FeePayment> getStudentLatestFeePayment(UUID studentId){
+    private Optional<FeePayment> getStudentLatestFeePayment(UUID studentId) {
         return feePaymentRepository.findFirstByStudentAccount_IdOrderByPaymentDateDesc(studentId);
     }
-    
+
 }
