@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+
+@Table(name = "institutional_fees")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=false)
