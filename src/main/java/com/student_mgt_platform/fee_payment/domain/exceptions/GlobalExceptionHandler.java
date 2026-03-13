@@ -28,6 +28,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    public ProblemDetail handleResourceAlreadyExistException(ResourceAlreadyExistException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problemDetail.setDetail(e.getMessage());
+        problemDetail.setTitle("Resource already exist Found");
+        problemDetail.setType(URI.create(API_URL));
+        problemDetail.setProperty("timestamp", System.currentTimeMillis());
+        return problemDetail;
+    }
+
     @ExceptionHandler(BusinessValidationException.class)
     public ProblemDetail handleBusinessValidationException(BusinessValidationException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
