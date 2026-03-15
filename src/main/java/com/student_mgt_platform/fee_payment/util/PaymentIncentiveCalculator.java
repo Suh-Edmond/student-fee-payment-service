@@ -1,6 +1,7 @@
 package com.student_mgt_platform.fee_payment.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static com.student_mgt_platform.fee_payment.constant.IncentiveRate.*;
 
@@ -18,11 +19,12 @@ public class PaymentIncentiveCalculator {
     }
 
     public static BigDecimal computeIncentiveAmount(BigDecimal paymentAmount,  int incentiveRate) {
-        return paymentAmount.multiply(BigDecimal.valueOf(incentiveRate));
+        double rate = (double) incentiveRate / 100;
+        return paymentAmount.multiply(BigDecimal.valueOf(rate)).setScale(2, RoundingMode.HALF_UP);
     }
 
     public static BigDecimal computePaymentBalance(BigDecimal paymentAmount, BigDecimal incentiveAmount, BigDecimal institutionalFee) {
-        return institutionalFee.subtract(paymentAmount.add(incentiveAmount));
+        return institutionalFee.subtract(paymentAmount.add(incentiveAmount)).setScale(2, RoundingMode.HALF_UP);
     }
 
 }

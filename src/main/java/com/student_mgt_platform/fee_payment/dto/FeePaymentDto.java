@@ -6,12 +6,11 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class FeePaymentDto extends BaseDto {
-    private UUID id;
+    private String id;
     private BigDecimal previousBalance;
     private BigDecimal paymentAmount;
     private int incentiveRate;
