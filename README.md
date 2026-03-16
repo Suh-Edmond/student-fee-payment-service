@@ -1,6 +1,6 @@
 
 # Student One-Time Institutional Fee Payment
-Simple Fee payment service for students develop with Spring Boot using Monolithic Design Pattern. This Project is aimed at processing student's one-time fee payment
+Simple Fee payment API Service for Institutions, develop with Spring Boot using MVC Design Architecture. This Project is aimed at processing student's one-time fee payment
 in an institution
 
 ## Tools and Technologies
@@ -33,7 +33,7 @@ hence students don't have to be authenticated to perform this fee payment. But t
 * Setup a MySQL database
 * create the database `student_mgt_db` mentioned in the properties file `application.yaml`
 * Run the application
-* API Documentation: http://localhost:8000/swagger-ui/#/
+* API Documentation: http://localhost:8000/swagger-ui/index.html#/
 
 ## Run test
 * ./mvnw clean test
