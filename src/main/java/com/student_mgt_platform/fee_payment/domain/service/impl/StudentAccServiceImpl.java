@@ -7,6 +7,7 @@ import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
 import com.student_mgt_platform.fee_payment.domain.repository.StudentAccountRepository;
 import com.student_mgt_platform.fee_payment.domain.service.StudentAccService;
+import com.student_mgt_platform.fee_payment.dto.InstitutionFeeDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountRequestDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountResponseDto;
 import com.student_mgt_platform.fee_payment.dto.mapper.InstitutionFeeMapper;
@@ -57,6 +58,12 @@ public class StudentAccServiceImpl implements StudentAccService {
     @Override
     public void updateStudentAccount(StudentAccount studentAccount) {
         studentAccountRepository.save(studentAccount);
+    }
+
+    @Override
+    public InstitutionFeeDto getInstitutionFee(String studentNumber) {
+        StudentAccount studentAccount = getStudentAccount(studentNumber);
+        return  InstitutionFeeMapper.INSTANCE.mapToInstitutionFeeDto(studentAccount.getInstitutionalFee());
     }
 
     private InstitutionalFee getInstitutionalFee(String institutionFeeId) {

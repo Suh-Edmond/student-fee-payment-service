@@ -1,15 +1,13 @@
 package com.student_mgt_platform.fee_payment.domain.controller;
 
 import com.student_mgt_platform.fee_payment.domain.service.StudentAccService;
+import com.student_mgt_platform.fee_payment.dto.InstitutionFeeDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountRequestDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +18,10 @@ public class StudentAccountController {
     @PostMapping("create")
     public ResponseEntity<StudentAccountResponseDto> createStudentAccount(@Valid  @RequestBody StudentAccountRequestDto studentAccountDto) {
         return ResponseEntity.ok(studentAccService.createStudentAccount(studentAccountDto));
+    }
+
+    @GetMapping("institution-fee")
+    public ResponseEntity<InstitutionFeeDto> getInstitutionFee(@RequestParam String studentNumber) {
+        return ResponseEntity.ok(studentAccService.getInstitutionFee(studentNumber));
     }
 }

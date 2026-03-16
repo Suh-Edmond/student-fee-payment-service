@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.student_mgt_platform.fee_payment.FeePaymentApplication;
 import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
 import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
+import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
 import com.student_mgt_platform.fee_payment.domain.repository.StudentAccountRepository;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountRequestDto;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,6 +53,12 @@ public class StudentAccountControllerIntegrationTest {
         studentAccountRequestDto.setStudentName("studentName");
         studentAccountRequestDto.setInstitutionFeeId(institutionalFee.getId().toString());
 
+        StudentAccount studentAccount = new StudentAccount();
+        studentAccount.setInstitutionalFee(institutionalFee);
+        studentAccount.setStudentName(studentAccountRequestDto.getStudentName());
+        studentAccount.setStudentNumber(studentAccountRequestDto.getStudentNumber());
+        studentAccountRepository.save(studentAccount);
+
     }
 
     @AfterEach
@@ -76,5 +84,14 @@ public class StudentAccountControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(studentAccountRequestDto)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getInstitutionFee_returns_200() throws Exception {
+        mockMvc.perform(get("/api/public/student-account/institution-fee?studentNumber={studentNumber}",studentAccountRequestDto.getStudentNumber())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.amountPayable").value(800000))
+                .andExpect(jsonPath("$.category").value(InstitutionalFeeCategory.FRESH_MEN.toString()));
     }
 }

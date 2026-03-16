@@ -6,6 +6,7 @@ import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
 import com.student_mgt_platform.fee_payment.domain.repository.InstitutionalFeeRepository;
 import com.student_mgt_platform.fee_payment.domain.repository.StudentAccountRepository;
+import com.student_mgt_platform.fee_payment.dto.InstitutionFeeDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountRequestDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountResponseDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,5 +131,22 @@ class StudentAccServiceImplTest {
         verify(mockStudentAccountRepository).save(studentAccountArgumentCaptor.capture());
 
         assertEquals(account.getNextDueDate(), studentAccountArgumentCaptor.getValue().getNextDueDate());
+    }
+
+    @Test
+    void getInstitutionalFee_returnsInstitutionalFee() {
+        StudentAccount savedAcc = new StudentAccount();
+        savedAcc.setStudentNumber(requestDto.getStudentNumber());
+        savedAcc.setStudentName(requestDto.getStudentName());
+        savedAcc.setInstitutionalFee(institutionalFee);
+        savedAcc.setId(UUID.randomUUID());
+
+        when(mockStudentAccountRepository.findByStudentNumber("studentNumber")).thenReturn(Optional.of(savedAcc));
+        InstitutionFeeDto institutionFeeDto = studentAccService.getInstitutionFee("studentNumber");
+
+        assertEquals(0, institutionFeeDto.getAmountPayable().compareTo(institutionalFee.getAmountPayable()));
+        assertEquals(institutionalFee.getId().toString(), institutionFeeDto.getId());
+        assertEquals(institutionalFee.getCategory(), institutionFeeDto.getCategory());
+        assertEquals(institutionalFee.getName(), institutionFeeDto.getName());
     }
 }

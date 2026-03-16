@@ -3,6 +3,7 @@ package com.student_mgt_platform.fee_payment.domain.controller;
 import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
 import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.service.impl.StudentAccServiceImpl;
+import com.student_mgt_platform.fee_payment.dto.InstitutionFeeDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountRequestDto;
 import com.student_mgt_platform.fee_payment.dto.StudentAccountResponseDto;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,13 @@ class StudentAccountControllerTest {
         ResponseEntity<StudentAccountResponseDto> responseEntity = studentAccountController.createStudentAccount(studentAccountRequestDto);
         verify(studentAccService).createStudentAccount(studentAccountRequestDto);
 
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void getInstitutionFee() {
+        ResponseEntity<InstitutionFeeDto> responseEntity = studentAccountController.getInstitutionFee("studentNumber");
+        verify(studentAccService).getInstitutionFee("studentNumber");
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
