@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,7 +56,13 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         studentAccount.setNextDueDate(nextPaymentDueDate);
         studentAccService.updateStudentAccount(studentAccount);
 
-        return FeePaymentMapper.INSTANCE.feePaymentDtoToFeePayment(savedFeePayment, nextPaymentDueDate);
+        return FeePaymentMapper.INSTANCE.feePaymentToFeePaymentDto(savedFeePayment, nextPaymentDueDate);
+    }
+
+    @Override
+    public List<FeePaymentDto> getStudentPayments(String studentNumber) {
+        List<FeePayment> studentPayments = feePaymentRepository.findAllByStudentAccount_StudentNumberOrderByPaymentDateDesc(studentNumber);
+        return studentPayments.stream().map(e -> FeePaymentMapper.INSTANCE.feePaymentToFeePaymentDto(e, e.getStudentAccount().getNextDueDate())).toList();
     }
 
     private Optional<FeePayment> getStudentLatestFeePayment(UUID studentId) {

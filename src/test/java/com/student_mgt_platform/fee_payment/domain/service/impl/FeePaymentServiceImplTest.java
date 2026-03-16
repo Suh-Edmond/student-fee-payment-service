@@ -21,12 +21,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.student_mgt_platform.fee_payment.constant.ErrorCodes.STUDENT_ACCOUNT_NOT_FOUND;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -149,6 +150,31 @@ class FeePaymentServiceImplTest {
         assertEquals(feePaymentDto.getNextDueDate(), studentAccountArgumentCaptor.getValue().getNextDueDate());
 
         assertEquals(studentAccount.getNextDueDate(), studentAccountArgumentCaptor.getValue().getNextDueDate());
+    }
+
+    @Test
+    void getStudentPayments_should_return_all_payments(){
+        FeePayment saved = new FeePayment();
+        saved.setPreviousBalance(institutionalFee.getAmountPayable());
+        saved.setStudentAccount(studentAccount);
+        saved.setPaymentAmount(feePaymentRequest.getPaymentAmount());
+        saved.setIncentiveAmount(BigDecimal.valueOf(3000.00));
+        saved.setIncentiveRate(IncentiveRate.MEDIUM_RATE);
+        saved.setPaymentDate(LocalDate.now());
+        saved.setId(UUID.randomUUID());
+        saved.setNewBalance(BigDecimal.valueOf(697000.00));
+
+        when(mockFeePaymentRepository.findAllByStudentAccount_StudentNumberOrderByPaymentDateDesc(studentAccount.getStudentNumber())).thenReturn(List.of(saved));
+        List<FeePaymentDto> studentPayments = feePaymentService.getStudentPayments(studentAccount.getStudentNumber());
+
+        assertEquals(1, studentPayments.size());
+        assertEquals(0, saved.getNewBalance().compareTo(studentPayments.get(0).getNewBalance()));
+        assertEquals(0, saved.getPaymentAmount().compareTo(studentPayments.get(0).getPaymentAmount()));
+        assertEquals(0, saved.getIncentiveAmount().compareTo(studentPayments.get(0).getIncentiveAmount()));
+        assertEquals(saved.getIncentiveRate(), studentPayments.get(0).getIncentiveRate());
+        assertEquals(saved.getStudentAccount().getStudentNumber(), studentPayments.get(0).getStudentNumber());
+        assertEquals(0, saved.getPreviousBalance().compareTo(studentPayments.get(0).getPreviousBalance()));
+        assertEquals(saved.getStudentAccount().getNextDueDate(), studentPayments.get(0).getNextDueDate());
     }
 
 

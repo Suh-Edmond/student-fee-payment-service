@@ -2,6 +2,7 @@ package com.student_mgt_platform.fee_payment.dto.mapper;
 
 import com.student_mgt_platform.fee_payment.domain.model.FeePayment;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -9,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.WARN, imports = {RoundingMode.class}, config = BaseDtoMapper.class)
 public interface FeePaymentMapper {
@@ -21,5 +23,5 @@ public interface FeePaymentMapper {
     @Mapping(target = "incentiveAmount", expression = "java(feePayment.getIncentiveAmount().setScale(2, RoundingMode.HALF_UP))")
     @Mapping(target = "paymentAmount", expression = "java(feePayment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP))")
     @Mapping(target = "previousBalance", expression = "java(feePayment.getPreviousBalance().setScale(2, RoundingMode.HALF_UP))")
-    FeePaymentDto feePaymentDtoToFeePayment(FeePayment feePayment, LocalDate nextDueDate);
+    FeePaymentDto feePaymentToFeePaymentDto(FeePayment feePayment, LocalDate nextDueDate);
 }

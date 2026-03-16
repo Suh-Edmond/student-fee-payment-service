@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -35,11 +36,18 @@ class FeePaymentControllerTest {
     }
 
     @Test
-    void testInitiateStudentFeePaymentIsCalled() {
+    void makeStudentFeePayment() {
         ResponseEntity<FeePaymentDto> feePaymentDtoResponseEntity = feePaymentController.oneTimeFeePayment(feePaymentRequest);
         verify(feePaymentService).makeStudentFeePayment(feePaymentRequest);
 
         assertEquals(HttpStatus.OK, feePaymentDtoResponseEntity.getStatusCode());
+    }
+
+    @Test
+    void getStudentPayments(){
+        ResponseEntity<List<FeePaymentDto>> responseEntity = feePaymentController.getStudentPayments("studentNumber");
+        verify(feePaymentService).getStudentPayments("studentNumber");
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
 }

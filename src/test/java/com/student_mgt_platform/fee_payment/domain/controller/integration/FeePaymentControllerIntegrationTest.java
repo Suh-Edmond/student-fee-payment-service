@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -100,5 +101,12 @@ public class FeePaymentControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(feePaymentRequest)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getStudentPayments_returns_student_payments() throws Exception{
+        mockMvc.perform(get("/api/public/student-payments?studentNumber={studentNumber}", feePaymentRequest.getStudentNumber())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }
