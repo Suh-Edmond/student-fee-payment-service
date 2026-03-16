@@ -100,10 +100,10 @@ class FeePaymentServiceImplTest {
         verify(mockFeePaymentRepository).save(feePaymentArgumentCaptor.capture());
         verify(mockStudentAccService).updateStudentAccount(studentAccountArgumentCaptor.capture());
 
-        assertEquals(feePaymentDto.getPaymentAmount(), feePaymentArgumentCaptor.getValue().getPaymentAmount().setScale(2, RoundingMode.HALF_UP));
-        assertEquals(feePaymentDto.getNewBalance(), feePaymentArgumentCaptor.getValue().getNewBalance().setScale(2, RoundingMode.HALF_UP));
-        assertEquals(feePaymentDto.getPreviousBalance(), feePaymentArgumentCaptor.getValue().getPreviousBalance().setScale(2, RoundingMode.HALF_UP));
-        assertEquals(feePaymentDto.getIncentiveAmount(), feePaymentArgumentCaptor.getValue().getIncentiveAmount().setScale(2, RoundingMode.HALF_UP));
+        assertEquals(0, feePaymentDto.getPaymentAmount().compareTo(feePaymentArgumentCaptor.getValue().getPaymentAmount()));
+        assertEquals(0, feePaymentDto.getNewBalance().compareTo(feePaymentArgumentCaptor.getValue().getNewBalance()));
+        assertEquals(0, feePaymentDto.getPreviousBalance().compareTo(feePaymentArgumentCaptor.getValue().getPreviousBalance()));
+        assertEquals(0, feePaymentDto.getIncentiveAmount().compareTo(feePaymentArgumentCaptor.getValue().getIncentiveAmount()));
         assertEquals(feePaymentDto.getIncentiveRate(), feePaymentArgumentCaptor.getValue().getIncentiveRate());
         assertEquals(feePaymentDto.getStudentNumber(), feePaymentArgumentCaptor.getValue().getStudentAccount().getStudentNumber());
         assertEquals(feePaymentDto.getNextDueDate(), studentAccountArgumentCaptor.getValue().getNextDueDate());

@@ -15,6 +15,8 @@ in an institution
 * Spring Devtools
 * Flyway
 * Junit5
+* MapStruct
+* H2 Database for testing
 
 ## Features
 To achieve this fee payment, the service provides a list of endpoints, namely:
@@ -27,6 +29,7 @@ To achieve this fee payment, the service provides a list of endpoints, namely:
 ## Assumptions:
 * No Security implemented: Since it's just a basic application, my design did not consider security, 
 hence students don't have to be authenticated to perform this fee payment. But they must create an account
+* The payment API would not connect to any external payment provider
 
 ## How to run Service
 * Setup dev environment ensuring Java JDK 17 is installed
@@ -36,7 +39,7 @@ hence students don't have to be authenticated to perform this fee payment. But t
 * API Documentation: http://localhost:8000/swagger-ui/index.html#/
 
 ## Run test
-* ./mvnw clean test
+* ```./mvnw clean test```
 
 ## Build application
-* ./mvnw clean build
+* ```./mvnw clean build```

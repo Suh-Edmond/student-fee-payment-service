@@ -13,6 +13,8 @@ import java.net.URI;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.student_mgt_platform.fee_payment.constant.ErrorCodes.*;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private final String API_URL = "https://localhost:8000/api/"; //TODO; Change to actual prod url
@@ -22,7 +24,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleResourceNotFoundException(ResourceNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setDetail(e.getMessage());
-        problemDetail.setTitle("Resource Not Found");
+        problemDetail.setTitle(RESOURCE_NOT_FOUND);
         problemDetail.setType(URI.create(API_URL));
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         return problemDetail;
@@ -32,7 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleResourceAlreadyExistException(ResourceAlreadyExistException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
         problemDetail.setDetail(e.getMessage());
-        problemDetail.setTitle("Resource already exist Found");
+        problemDetail.setTitle(RESOURCE_ALREADY_EXIST);
         problemDetail.setType(URI.create(API_URL));
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         return problemDetail;
@@ -42,7 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleBusinessValidationException(BusinessValidationException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setDetail(e.getMessage());
-        problemDetail.setTitle("Fee Payment Business Validation");
+        problemDetail.setTitle(FEE_PAYMENT_BUSINESS_VALIDATION_EXCEPTION);
         problemDetail.setType(URI.create(API_URL));
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         return problemDetail;
@@ -56,7 +58,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 fieldError -> fieldError.getDefaultMessage() != null ? fieldError.getDefaultMessage() : "Invalid value",
                 (existing, replacement) -> replacement
         ));
-        problemDetail.setTitle("Validation Error");
+        problemDetail.setTitle(VALIDATION_EXCEPTION);
         problemDetail.setType(URI.create(API_URL));
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         problemDetail.setProperty("invalid_parameters", errors);
