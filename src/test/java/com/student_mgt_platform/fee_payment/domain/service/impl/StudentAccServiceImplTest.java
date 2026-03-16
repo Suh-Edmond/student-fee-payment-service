@@ -1,6 +1,7 @@
 package com.student_mgt_platform.fee_payment.domain.service.impl;
 
 import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
+import com.student_mgt_platform.fee_payment.domain.exceptions.ResourceAlreadyExistException;
 import com.student_mgt_platform.fee_payment.domain.exceptions.ResourceNotFoundException;
 import com.student_mgt_platform.fee_payment.domain.model.InstitutionalFee;
 import com.student_mgt_platform.fee_payment.domain.model.StudentAccount;
@@ -23,8 +24,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.student_mgt_platform.fee_payment.constant.ErrorCodes.INSTITUTION_FEE_NOT_FOUND;
-import static com.student_mgt_platform.fee_payment.constant.ErrorCodes.STUDENT_ACCOUNT_NOT_FOUND;
+import static com.student_mgt_platform.fee_payment.constant.ErrorCodes.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,6 +82,22 @@ class StudentAccServiceImplTest {
         assertNotNull(studentAccountArgumentCaptor.getValue().getInstitutionalFee().getId());
         assertNotNull(studentAccountResponseDto);
         assertEquals(institutionalFee.getAmountPayable(), studentAccountResponseDto.getInstitutionFeeDto().getAmountPayable());
+    }
+
+    @Test
+    void createStudentAccount_return_resource_already_exist_when_student_number_found() {
+        StudentAccount savedAcc = new StudentAccount();
+        savedAcc.setStudentNumber(requestDto.getStudentNumber());
+        savedAcc.setStudentName(requestDto.getStudentName());
+        savedAcc.setInstitutionalFee(institutionalFee);
+        savedAcc.setId(UUID.randomUUID());
+
+        when(mockInstitutionalFeeRepository.findById(UUID.fromString(requestDto.getInstitutionFeeId()))).thenReturn(Optional.of(institutionalFee));
+        when(mockStudentAccountRepository.findByStudentNumber(requestDto.getStudentNumber())).thenReturn(Optional.of(savedAcc));
+
+        ResourceAlreadyExistException exception = assertThrows(ResourceAlreadyExistException.class, () -> studentAccService.createStudentAccount(requestDto));
+        assertEquals(STUDENT_ACCOUNT_FOUND, exception.getMessage());
+        assertEquals(ResourceAlreadyExistException.class, exception.getClass());
 
     }
 
