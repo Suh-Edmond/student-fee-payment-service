@@ -33,7 +33,7 @@ hence students don't have to be authenticated to perform this fee payment. But t
 * Setup a MySQL database
 * create the database `student_mgt_db` mentioned in the properties file `application.yaml`
 * Run the application
-* API Documentation: http://localhost:8000/swagger-ui/#/
+* API Documentation: http://localhost:8000/swagger-ui/index.html#/
 
 ## Run test
 * ./mvnw clean test
