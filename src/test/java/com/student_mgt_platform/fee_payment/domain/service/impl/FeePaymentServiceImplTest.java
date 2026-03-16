@@ -19,9 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -153,7 +151,7 @@ class FeePaymentServiceImplTest {
     }
 
     @Test
-    void getStudentPayments_should_return_all_payments(){
+    void getStudentPayments_should_return_all_payments() {
         FeePayment saved = new FeePayment();
         saved.setPreviousBalance(institutionalFee.getAmountPayable());
         saved.setStudentAccount(studentAccount);
