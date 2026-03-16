@@ -14,7 +14,7 @@ spring:
     hibernate:
       ddl-auto: none
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: false
+    show-sql: true
   sql:
     init:
       mode: always
@@ -23,4 +23,5 @@ spring:
 
 server:
   port: 8000
+
 

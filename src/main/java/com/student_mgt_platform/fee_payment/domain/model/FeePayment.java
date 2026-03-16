@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Table(name = "fee_payments")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=false)

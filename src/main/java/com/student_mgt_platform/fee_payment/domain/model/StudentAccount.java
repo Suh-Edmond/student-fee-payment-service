@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+@Table(name = "student_accounts")
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=false)
-public class StudentAccount extends BaseEntity{
+@EqualsAndHashCode(callSuper = false)
+public class StudentAccount extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -20,11 +20,14 @@ public class StudentAccount extends BaseEntity{
     @Column(name = "student_number")
     private String studentNumber;
 
-    @Column(name = "current_balance")
-    private BigDecimal currentBalance;
+    @Column(name = "student_name")
+    private String studentName;
 
     @Column(name = "next_due_date")
     private LocalDate nextDueDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private InstitutionalFee institutionalFee;
 
     @OneToMany(mappedBy = "studentAccount")
     private Set<FeePayment> feePayments;

@@ -6,9 +6,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
-import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.computeIncentiveRate;
-import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.computeIncentiveAmount;
-import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.computePaymentBalance;
+import static com.student_mgt_platform.fee_payment.util.PaymentIncentiveCalculator.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,12 +51,14 @@ class PaymentIncentiveCalculatorTest {
     @Test
     void computeIncentiveAmount_should_compute_incentiveAmount() {
         BigDecimal incentiveAmount = computeIncentiveAmount(BigDecimal.valueOf(100000), 3);
-        assertEquals(BigDecimal.valueOf(300000), incentiveAmount);
+
+        assertTrue(incentiveAmount.compareTo(BigDecimal.valueOf(3000.00)) == 0);
     }
 
     @Test
     void computePaymentBalance_should_compute_paymentBalance() {
         BigDecimal paymentBalance = computePaymentBalance(BigDecimal.valueOf(100000), BigDecimal.valueOf(3000), BigDecimal.valueOf(800000));
-        assertEquals(BigDecimal.valueOf(697000), paymentBalance);
+
+        assertTrue(paymentBalance.compareTo(BigDecimal.valueOf(697000.00)) == 0);
     }
 }

@@ -1,3 +1,3 @@
-INSERT INTO `institutional_fee` (`id`, `amount_payable`, `category`, `name`) VALUES (UUID_TO_BIN(UUID()), '800000', 'FRESH_MEN', 'Fresh Men');
-INSERT INTO `institutional_fee` (`id`, `amount_payable`, `category`, `name`) VALUES (UUID_TO_BIN(UUID()), '900000', 'SOPHOMORE', 'Fresh Men');
-INSERT INTO `institutional_fee` (`id`, `amount_payable`, `category`, `name`) VALUES (UUID_TO_BIN(UUID()), '1000000', 'SENIOR', 'Fresh Men');
+INSERT INTO `institutional_fees` (`id`, `amount_payable`, `category`, `name`, `created`, `updated`) VALUES (UUID_TO_BIN(UUID()), '800000', 'FRESH_MEN', 'Fresh Men', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO `institutional_fees` (`id`, `amount_payable`, `category`, `name`, `created`, `updated`) VALUES (UUID_TO_BIN(UUID()), '900000', 'SOPHOMORE', 'Sophomore', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO `institutional_fees` (`id`, `amount_payable`, `category`, `name`, `created`, `updated`) VALUES (UUID_TO_BIN(UUID()), '1000000', 'SENIOR', 'Senior', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

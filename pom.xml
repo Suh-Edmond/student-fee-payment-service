@@ -155,6 +155,7 @@
 						<exclude>**/exceptions/**</exclude>
 						<exclude>**/mapper/**</exclude>
 						<exclude>**/constant/**</exclude>
+						<exclude>**/config/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

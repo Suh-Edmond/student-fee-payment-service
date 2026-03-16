@@ -1,6 +1,5 @@
 package com.student_mgt_platform.fee_payment.domain.controller;
 
-import com.student_mgt_platform.fee_payment.constant.InstitutionalFeeCategory;
 import com.student_mgt_platform.fee_payment.domain.service.impl.FeePaymentServiceImpl;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentDto;
 import com.student_mgt_platform.fee_payment.dto.FeePaymentRequest;
@@ -14,8 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,16 +33,21 @@ class FeePaymentControllerTest {
         feePaymentRequest = new FeePaymentRequest();
         feePaymentRequest.setPaymentAmount(BigDecimal.valueOf(100000));
         feePaymentRequest.setStudentNumber("studentNumber");
-        feePaymentRequest.setInstitutionalFeeCategory(InstitutionalFeeCategory.FRESH_MEN);
-
     }
 
     @Test
-    void testInitiateStudentFeePaymentIsCalled() {
+    void makeStudentFeePayment() {
         ResponseEntity<FeePaymentDto> feePaymentDtoResponseEntity = feePaymentController.oneTimeFeePayment(feePaymentRequest);
         verify(feePaymentService).makeStudentFeePayment(feePaymentRequest);
 
         assertEquals(HttpStatus.OK, feePaymentDtoResponseEntity.getStatusCode());
+    }
+
+    @Test
+    void getStudentPayments(){
+        ResponseEntity<List<FeePaymentDto>> responseEntity = feePaymentController.getStudentPayments("studentNumber");
+        verify(feePaymentService).getStudentPayments("studentNumber");
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
 }
