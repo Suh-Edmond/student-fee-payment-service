@@ -55,14 +55,14 @@ public class StudentAccountControllerIntegrationTest {
         InstitutionalFee saved2 = institutionalFeeRepository.save(institutionalFee2);
 
         studentAccountRequestDto = new StudentAccountRequestDto();
-        studentAccountRequestDto.setStudentNumber("studentNumber");
+        studentAccountRequestDto.setStudentNumber("studNum");
         studentAccountRequestDto.setStudentName("studentName");
         studentAccountRequestDto.setInstitutionFeeId(saved.getId().toString());
 
         StudentAccount studentAccount = new StudentAccount();
         studentAccount.setInstitutionalFee(saved2);
-        studentAccount.setStudentName("studentName1");
-        studentAccount.setStudentNumber("studentNumber1");
+        studentAccount.setStudentName("studName1");
+        studentAccount.setStudentNumber("studNum1");
         studentAccountRepository.save(studentAccount);
 
     }
@@ -79,7 +79,7 @@ public class StudentAccountControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(studentAccountRequestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.studentNumber").value("studentNumber"))
+                .andExpect(jsonPath("$.studentNumber").value("studNum"))
                 .andExpect(jsonPath("$.studentName").value("studentName"));
     }
 
@@ -94,7 +94,7 @@ public class StudentAccountControllerIntegrationTest {
 
     @Test
     void getInstitutionFee_returns_200() throws Exception {
-        mockMvc.perform(get("/api/public/student-account/institution-fee?studentNumber={studentNumber}","studentNumber1")
+        mockMvc.perform(get("/api/public/student-account/institution-fee?studentNumber={studentNumber}","studNum1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.amountPayable").value(900000))

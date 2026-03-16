@@ -41,5 +41,8 @@ hence students don't have to be authenticated to perform this fee payment. But t
 ## Run test
 * ```./mvnw clean test```
 
+## Run test with coverage
+* ```./mvnw clean install```
+
 ## Build application
-* ```./mvnw clean build```
+* ```./mvnw clean package```
