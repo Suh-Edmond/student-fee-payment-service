@@ -26,7 +26,7 @@ public class StudentAccount extends BaseEntity {
     @Column(name = "next_due_date")
     private LocalDate nextDueDate;
 
-    @OneToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private InstitutionalFee institutionalFee;
 
     @OneToMany(mappedBy = "studentAccount")

@@ -31,7 +31,7 @@ hence students don't have to be authenticated to perform this fee payment. But t
 ## How to run Service
 * Setup dev environment ensuring Java JDK 17 is installed
 * Setup a MySQL database
-* create the database mentioned in the properties file `application.yaml`
+* create the database `student_mgt_db` mentioned in the properties file `application.yaml`
 * Run the application
 * API Documentation: http://localhost:8000/swagger-ui/#/
 

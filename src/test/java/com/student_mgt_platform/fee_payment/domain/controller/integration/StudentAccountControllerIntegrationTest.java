@@ -46,17 +46,23 @@ public class StudentAccountControllerIntegrationTest {
         institutionalFee.setCategory(InstitutionalFeeCategory.FRESH_MEN);
         institutionalFee.setName("Fresh Men");
         institutionalFee.setAmountPayable(BigDecimal.valueOf(800000));
-        institutionalFeeRepository.save(institutionalFee);
+        InstitutionalFee saved = institutionalFeeRepository.save(institutionalFee);
+
+        InstitutionalFee institutionalFee2 = new InstitutionalFee();
+        institutionalFee2.setCategory(InstitutionalFeeCategory.SOPHOMORE);
+        institutionalFee2.setName("Fresh Men");
+        institutionalFee2.setAmountPayable(BigDecimal.valueOf(900000));
+        InstitutionalFee saved2 = institutionalFeeRepository.save(institutionalFee2);
 
         studentAccountRequestDto = new StudentAccountRequestDto();
         studentAccountRequestDto.setStudentNumber("studentNumber");
         studentAccountRequestDto.setStudentName("studentName");
-        studentAccountRequestDto.setInstitutionFeeId(institutionalFee.getId().toString());
+        studentAccountRequestDto.setInstitutionFeeId(saved.getId().toString());
 
         StudentAccount studentAccount = new StudentAccount();
-        studentAccount.setInstitutionalFee(institutionalFee);
-        studentAccount.setStudentName(studentAccountRequestDto.getStudentName());
-        studentAccount.setStudentNumber(studentAccountRequestDto.getStudentNumber());
+        studentAccount.setInstitutionalFee(saved2);
+        studentAccount.setStudentName("studentName1");
+        studentAccount.setStudentNumber("studentNumber1");
         studentAccountRepository.save(studentAccount);
 
     }
@@ -88,10 +94,10 @@ public class StudentAccountControllerIntegrationTest {
 
     @Test
     void getInstitutionFee_returns_200() throws Exception {
-        mockMvc.perform(get("/api/public/student-account/institution-fee?studentNumber={studentNumber}",studentAccountRequestDto.getStudentNumber())
+        mockMvc.perform(get("/api/public/student-account/institution-fee?studentNumber={studentNumber}","studentNumber1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.amountPayable").value(800000))
-                .andExpect(jsonPath("$.category").value(InstitutionalFeeCategory.FRESH_MEN.toString()));
+                .andExpect(jsonPath("$.amountPayable").value(900000))
+                .andExpect(jsonPath("$.category").value(InstitutionalFeeCategory.SOPHOMORE.toString()));
     }
 }

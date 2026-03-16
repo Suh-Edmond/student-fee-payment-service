@@ -7,4 +7,4 @@ create table institutional_fees
     name           varchar(255),
     category       enum ('FRESH_MEN','SENIOR','SOPHOMORE'),
     primary key (id)
-)
+);

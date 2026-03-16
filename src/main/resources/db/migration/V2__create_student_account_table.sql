@@ -10,6 +10,4 @@ create table student_accounts
     primary key (id)
 );
 alter table student_accounts
-    add constraint UKijxidh1mwcfcmk9lfirjsbuyq unique (institutional_fee_id);
-alter table student_accounts
-    add constraint FKbmhebg1ten7t46enllq93fqkt foreign key (institutional_fee_id) references institutional_fees (id)
+    add constraint FKs5m94j17nc4mpgwxxymaqcg43 foreign key (institutional_fee_id) references institutional_fees (id)
