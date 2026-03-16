@@ -1,6 +1,6 @@
 
 # Student One-Time Institutional Fee Payment
-Simple Fee payment service for students develop with Spring Boot using Monolithic Design Pattern. This Project is aimed at processing student's one-time fee payment
+Simple Fee payment API Service for Institutions, develop with Spring Boot using MVC Design Architecture. This Project is aimed at processing student's one-time fee payment
 in an institution
 
 ## Tools and Technologies
